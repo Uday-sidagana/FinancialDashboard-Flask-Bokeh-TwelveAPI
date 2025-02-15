@@ -30,3 +30,5 @@ date_picker_from = DatePicker(title = "Start Date", value ="2020-01-01", min_dat
 
 date_picker_to = DatePicker(title = "End Date", value ="2020-02-01", min_date='2000-01-01', 
                             max_date=dt.datetime.now().strftime("%Y-%M-%D"))
+
+indicator_choice = MultiChoice(options =["100 DAY SMA", "30 DAY SMA", "Linear Regression Line"])
