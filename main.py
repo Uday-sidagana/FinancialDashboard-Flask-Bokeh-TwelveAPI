@@ -12,7 +12,7 @@ from bokeh.layouts import column, row
 
 def load_data(ticker1, ticker2, start, end): 
     # Ticker = Financial abbreviation ex. Axiom is abbreviated as XOM
-    df1= yf.download(ticker1)
-    df2 = yf.download(ticker2)
+    df1= yf.download(ticker1, start, end)
+    df2 = yf.download(ticker2, start, end)
     return df1, df2
 
