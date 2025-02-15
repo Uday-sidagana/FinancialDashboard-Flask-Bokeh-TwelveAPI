@@ -16,3 +16,8 @@ def load_data(ticker1, ticker2, start, end):
     df2 = yf.download(ticker2, start, end)
     return df1, df2
 
+def plot_data(data, indicators, sync_axix= None):
+    pass
+
+def on_button_click(ticker1, ticker2, start, end, indicators):
+    pass
