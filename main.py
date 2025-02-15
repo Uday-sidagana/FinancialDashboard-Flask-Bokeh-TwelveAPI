@@ -8,3 +8,11 @@ from bokeh.io import curdoc
 from bokeh.plotting import figure
 from bokeh.models import buttons, TextInput, DatePicker, MultiChoice
 from bokeh.layouts import column, row
+
+
+def load_data(ticker1, ticker2, start, end): 
+    # Ticker = Financial abbreviation ex. Axiom is abbreviated as XOM
+    df1= yf.download(ticker1)
+    df2 = yf.download(ticker2)
+    return df1, df2
+
