@@ -32,3 +32,13 @@ date_picker_to = DatePicker(title = "End Date", value ="2020-02-01", min_date='2
                             max_date=dt.datetime.now().strftime("%Y-%M-%D"))
 
 indicator_choice = MultiChoice(options =["100 DAY SMA", "30 DAY SMA", "Linear Regression Line"])
+
+load_button = buttons(label = "Load Data", button_type ='success')
+
+load_button.on_click(on_button_click(stock1_text.value, stock2_text.value, date_picker_from, date_picker_to, indicator_choice.value))
+
+layout = column(stock1_text, stock2_text, date_picker_from, date_picker_to, indicator_choice, load_button)
+
+curdoc().clear()
+
+curdoc().add_root(layout)
