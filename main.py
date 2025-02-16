@@ -30,6 +30,16 @@ def plot_data(data, indicators, sync_axis= None):
         p = figure(tools='pan, wheel_zoom,box_zoom,reset,save', 
                    x_axis_type='datetime', width=1000)
 
+    p.xaxis.major_label_orientation = math.pi/4
+    p.grid.grid_line_alpha = 0.25
+    p.segment(df.index, df.High, df.index, df.Low, color="black")
+
+    p.vbar(df.index[gain], width, df.Open[gain], df.Close[gain], fill_color="00ff00", line_color="00ff00")
+    p.vbar(df.index[loss], width, df.Open[loss], df.Close[loss], fill_color="ff0000", line_color="ff0000")
+
+    return p
+
+
 
 def on_button_click(ticker1, ticker2, start, end, indicators):
     df1, df2 = load_data(ticker1, ticker2, start, end)
