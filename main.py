@@ -6,7 +6,7 @@ import yfinance as yf
 
 from bokeh.io import curdoc
 from bokeh.plotting import figure
-from bokeh.models import buttons, TextInput, DatePicker, MultiChoice
+from bokeh.models import Button, TextInput, DatePicker, MultiChoice
 from bokeh.layouts import column, row
 
 
@@ -14,7 +14,13 @@ def load_data(ticker1, ticker2, start, end):
     # Ticker = Financial abbreviation ex. Axiom is abbreviated as XOM
     df1= yf.download(ticker1, start, end)
     df2 = yf.download(ticker2, start, end)
+
+    if df1.empty or df2.empty:
+        print("Error: One or both tickers returned empty data.")
+
     return df1, df2
+
+
 
 def plot_data(data, indicators, sync_axis= None):
     df = data
@@ -37,6 +43,28 @@ def plot_data(data, indicators, sync_axis= None):
     p.vbar(df.index[gain], width, df.Open[gain], df.Close[gain], fill_color="00ff00", line_color="00ff00")
     p.vbar(df.index[loss], width, df.Open[loss], df.Close[loss], fill_color="ff0000", line_color="ff0000")
 
+    for indicator in indicators:
+        if indicator == "30 DAY SMA":
+            df["SMA30"] = df["close"].rolling(30).mean()
+            p.line(df.index, df.SMA30, color ="purple", legend_label="30 DAY SMA")
+
+        elif indicator == "100 DAY SMA":
+            df["SMA100"] = df["Close"].rolling(100).mean()
+            p.line(df.index, df.SMA100, color="purple", legend_label="100 DAY SMA")
+
+        elif indicator =="Linear Regression Line":
+            #Chatgpt stuff
+            par = np.polyfit(range(len(df.index.values)), df.Close.values, 1, full=True)
+            slope = par[0][0]
+            intercept = par[0][1]
+            y_predicted = [slope * i + intercept for i in range(len(df.index.values))]
+            p.segment(df.index[0], y_predicted[0], df.index[-1], y_predicted[-1], legend_label="Linear Regression",
+                      color="red")
+            #chatgpt end
+    
+    p.legend.location = "top_left"
+    p.legend.click_policy = "hide"
+
     return p
 
 
@@ -55,20 +83,20 @@ def on_button_click(ticker1, ticker2, start, end, indicators):
 stock1_text = TextInput(title = "Stock 1")
 stock2_text = TextInput(title = "Stock 2")
 
-date_picker_from = DatePicker(title = "Start Date", value ="2020-01-01", min_date='2000-01-01', 
-                              max_date=dt.datetime.now().strftime("%Y-%M-%D"))
+date_picker_from = DatePicker(title = "Start Date", value ="2025-01-01", min_date='2000-01-01', 
+                              max_date=dt.datetime.now().strftime("%Y-%m-%d"))
 
-date_picker_to = DatePicker(title = "End Date", value ="2020-02-01", min_date='2000-01-01', 
-                            max_date=dt.datetime.now().strftime("%Y-%M-%D"))
+date_picker_to = DatePicker(title = "End Date", value ="2025-02-01", min_date='2000-01-01', 
+                            max_date=dt.datetime.now().strftime("%Y-%m-%d"))
 
 indicator_choice = MultiChoice(options =["100 DAY SMA", "30 DAY SMA", "Linear Regression Line"])
 
-load_button = buttons(label = "Load Data", button_type ='success')
+load_button = Button(label = "Load Data", button_type ='success')
 
-load_button.on_click(on_button_click(stock1_text.value, stock2_text.value, date_picker_from, date_picker_to, indicator_choice.value))
+load_button.on_click(lambda :on_button_click(stock1_text.value, stock2_text.value, date_picker_from.value, date_picker_to.value, indicator_choice.value))
 
 layout = column(stock1_text, stock2_text, date_picker_from, date_picker_to, indicator_choice, load_button)
 
-curdoc().clear()
+
 
 curdoc().add_root(layout)
