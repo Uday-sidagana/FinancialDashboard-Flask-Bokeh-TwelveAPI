@@ -28,6 +28,8 @@ def on_button_click(ticker1, ticker2, start, end, indicators):
     curdoc().add_root(row(p1, p2))
 
 
+#UI LAYOUT(Choosing start date, end, Text, Labels, indicators and buttons)
+
 stock1_text = TextInput(title = "Stock 1")
 stock2_text = TextInput(title = "Stock 2")
 
