@@ -22,6 +22,15 @@ def plot_data(data, indicators, sync_axis= None):
     loss = df.Close< df.Open
     width = 12*60*60*1000
 
+    if sync_axis is not None:
+        p = figure(tools="pan, wheel_zoom,box_zoom, reset,save", 
+                   x_axis_type="datetime", width= 1000, x_range = sync_axis)
+        
+    else:
+        p = figure(tools='pan, wheel_zoom,box_zoom,reset,save', 
+                   x_axis_type='datetime', width=1000)
+
+
 def on_button_click(ticker1, ticker2, start, end, indicators):
     df1, df2 = load_data(ticker1, ticker2, start, end)
     p1= plot_data(df1, indicators)
