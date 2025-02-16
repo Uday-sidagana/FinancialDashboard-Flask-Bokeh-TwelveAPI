@@ -44,16 +44,15 @@ def plot_data(data, indicators, sync_axis= None):
     p.vbar(df.index[loss], width, df.Open[loss], df.Close[loss], fill_color="ff0000", line_color="ff0000")
 
     for indicator in indicators:
-        if indicator == "30 DAY SMA":
-            df["SMA30"] = df["close"].rolling(30).mean()
+        if indicator == "30 Day SMA":
+            df["SMA30"] = df["Close"].rolling(30).mean()
             p.line(df.index, df.SMA30, color ="purple", legend_label="30 DAY SMA")
 
-        elif indicator == "100 DAY SMA":
+        elif indicator == "100 Day SMA":
             df["SMA100"] = df["Close"].rolling(100).mean()
             p.line(df.index, df.SMA100, color="purple", legend_label="100 DAY SMA")
 
-        elif indicator =="Linear Regression Line":
-            #Chatgpt stuff
+        elif indicator == "Linear Regression Line":
             par = np.polyfit(range(len(df.index.values)), df.Close.values, 1, full=True)
             slope = par[0][0]
             intercept = par[0][1]
@@ -62,8 +61,8 @@ def plot_data(data, indicators, sync_axis= None):
                       color="red")
             #chatgpt end
     
-    p.legend.location = "top_left"
-    p.legend.click_policy = "hide"
+        p.legend.location = "top_left"
+        p.legend.click_policy = "hide"
 
     return p
 
@@ -98,5 +97,5 @@ load_button.on_click(lambda :on_button_click(stock1_text.value, stock2_text.valu
 layout = column(stock1_text, stock2_text, date_picker_from, date_picker_to, indicator_choice, load_button)
 
 
-
+curdoc().clear()
 curdoc().add_root(layout)
