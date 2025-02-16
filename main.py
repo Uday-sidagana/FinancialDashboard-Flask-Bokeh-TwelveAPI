@@ -20,7 +20,10 @@ def plot_data(data, indicators, sync_axis= None):
     pass
 
 def on_button_click(ticker1, ticker2, start, end, indicators):
-    pass
+    df1, df2 = load_data(ticker1, ticker2, start, end)
+    p1= plot_data(df1, indicators)
+    p2= plot_data(df2, indicators, sync_axis=p1.x_range)
+
 
 stock1_text = TextInput(title = "Stock 1")
 stock2_text = TextInput(title = "Stock 2")
