@@ -17,7 +17,10 @@ def load_data(ticker1, ticker2, start, end):
     return df1, df2
 
 def plot_data(data, indicators, sync_axis= None):
-    pass
+    df = data
+    gain = df.Close> df.Open
+    loss = df.Close< df.Open
+    width = 12*60*60*1000
 
 def on_button_click(ticker1, ticker2, start, end, indicators):
     df1, df2 = load_data(ticker1, ticker2, start, end)
