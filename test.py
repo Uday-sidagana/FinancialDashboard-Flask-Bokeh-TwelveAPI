@@ -20,11 +20,20 @@ def load_data(ticker1, ticker2, start, end):
     df1.index = pd.to_datetime(df1.index)
     df2.index = pd.to_datetime(df2.index)
 
-    df1 = df1[start:end]
-    df2 = df2[start:end]
+    # Ensure index is sorted in ascending order
+    df1 = df1.sort_index()
+    df2 = df2.sort_index()
+
+    # Convert start and end to datetime format
+    start = pd.to_datetime(start)
+    end = pd.to_datetime(end)
+
+    # Select data within the date range
+    df1 = df1.loc[start:end]
+    df2 = df2.loc[start:end]
 
     if df1.empty or df2.empty:
-        print("Error: No data retrieved for one or both tickers")
+        print("Error: No data retrieved for one or both tickers in the selected date range.")
         return None, None
 
     return df1, df2
