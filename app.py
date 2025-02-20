@@ -13,10 +13,13 @@ from bokeh.layouts import column, row
 def load_data(ticker1, ticker2, start, end): 
     # Ticker = Financial abbreviation ex. Axiom is abbreviated as XOM
     df1= yf.download(ticker1, start, end)
+    import time
+    time.sleep(2) 
     df2 = yf.download(ticker2, start, end)
 
     if df1.empty or df2.empty:
-        print("Error: One or both tickers returned empty data.")
+        print("Error: No data retrieved for one or both tickers")
+        return None, None
 
     return df1, df2
 
@@ -38,10 +41,13 @@ def plot_data(data, indicators, sync_axis= None):
 
     p.xaxis.major_label_orientation = math.pi/4
     p.grid.grid_line_alpha = 0.25
-    p.segment(df.index, df.High, df.index, df.Low, color="black")
+    p.line(df.index, y_predicted, legend_label="Linear Regression", color="red")
 
-    p.vbar(df.index[gain], width, df.Open[gain], df.Close[gain], fill_color="00ff00", line_color="00ff00")
-    p.vbar(df.index[loss], width, df.Open[loss], df.Close[loss], fill_color="ff0000", line_color="ff0000")
+
+    p.vbar(df.index[gain].values, width, df.Open[gain].values, df.Close[gain].values, fill_color="#00ff00", line_color="00ff00")
+    p.vbar(df.index[loss].values, width, df.Open[loss].values, df.Close[loss].values, fill_color="#ff0000", line_color="ff0000")
+
+
 
     for indicator in indicators:
         if indicator == "30 Day SMA":
@@ -61,8 +67,8 @@ def plot_data(data, indicators, sync_axis= None):
                       color="red")
             #chatgpt end
     
-        p.legend.location = "top_left"
-        p.legend.click_policy = "hide"
+    p.legend.location = "top_left"
+    p.legend.click_policy = "hide"
 
     return p
 
@@ -72,9 +78,9 @@ def on_button_click(ticker1, ticker2, start, end, indicators):
     df1, df2 = load_data(ticker1, ticker2, start, end)
     p1= plot_data(df1, indicators)
     p2= plot_data(df2, indicators, sync_axis=p1.x_range)
+    
     curdoc().clear()
-    curdoc().add_root(layout)
-    curdoc().add_root(row(p1, p2))
+    curdoc().add_root(column(layout, row(p1, p2)))
 
 
 #UI LAYOUT(Choosing start date, end, Text, Labels, indicators and buttons)
@@ -88,7 +94,7 @@ date_picker_from = DatePicker(title = "Start Date", value ="2025-01-01", min_dat
 date_picker_to = DatePicker(title = "End Date", value ="2025-02-01", min_date='2000-01-01', 
                             max_date=dt.datetime.now().strftime("%Y-%m-%d"))
 
-indicator_choice = MultiChoice(options =["100 DAY SMA", "30 DAY SMA", "Linear Regression Line"])
+indicator_choice = MultiChoice(options=["100 Day SMA", "30 Day SMA", "Linear Regression Line"])
 
 load_button = Button(label = "Load Data", button_type ='success')
 
