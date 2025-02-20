@@ -11,6 +11,16 @@ from bokeh.layouts import column, row
 
 import time
 
+from dotenv import load_dotenv
+import os
+
+# Load environment variables from .env file
+load_dotenv()
+
+# Access the API key
+api_key = os.getenv("API_KEY")
+print(f"Your API Key: {api_key}")  # Optional: for testing purposes
+
 
 def load_data(ticker1, ticker2, start, end): 
     # Ticker = Financial abbreviation ex. Axiom is abbreviated as XOM
