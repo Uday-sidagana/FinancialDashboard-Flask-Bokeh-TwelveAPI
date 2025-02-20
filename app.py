@@ -63,10 +63,22 @@ def plot_data(data, indicators, sync_axis=None):
     loss = df.close < df.open
     width = 12 * 60 * 60 * 1000  # Candle width (milliseconds)
 
+    # Ensure x_range is always set to a valid value
+    if sync_axis is None:
+        x_range = (df.index.min(), df.index.max())
+    else:
+        x_range = sync_axis
+
+     # Adjust the figure size here
     p = figure(
         tools="pan, wheel_zoom, box_zoom, reset, save",
-        x_axis_type="datetime", width=1000, x_range=sync_axis if sync_axis else None
+        x_axis_type="datetime", 
+        width=500,  # Reduced width
+        height=300,  # Reduced height
+        x_range=x_range
     )
+
+    
 
     p.xaxis.major_label_orientation = math.pi / 4
     p.grid.grid_line_alpha = 0.25
@@ -102,9 +114,6 @@ def plot_data(data, indicators, sync_axis=None):
 
 
 def on_button_click():
-    """
-    Handles button click to load data and update the plot.
-    """
     ticker1 = stock1_text.value.strip()
     ticker2 = stock2_text.value.strip()
     start = date_picker_from.value
@@ -114,14 +123,25 @@ def on_button_click():
     df1, df2 = load_data(ticker1, ticker2, start, end)
 
     if df1 is None and df2 is None:
-        print("Error: No data retrieved.")
+        print("Error: No data available for both tickers.")
         return
+    elif df1 is None:
+        print(f"Error: No data available for {ticker1}.")
+        df1 = pd.DataFrame()  # Ensure it's an empty DataFrame to avoid further errors
+    elif df2 is None:
+        print(f"Error: No data available for {ticker2}.")
+        df2 = pd.DataFrame()
 
-    p1 = plot_data(df1, indicators)
-    p2 = plot_data(df2, indicators, sync_axis=p1.x_range)
+    p1 = plot_data(df1, indicators) if not df1.empty else None
+    p2 = plot_data(df2, indicators, sync_axis=p1.x_range if p1 else None) if not df2.empty else None
+
+    if not p1 and not p2:
+        print("Error: Unable to generate plots for the given tickers.")
+        return
 
     curdoc().clear()
     curdoc().add_root(column(layout, row(p1, p2) if p1 and p2 else row(p1 or p2)))
+
 
 
 # UI Elements
