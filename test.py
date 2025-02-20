@@ -1,7 +1,7 @@
 import yfinance as yf
 
-ticker1 = "NVDA"
-ticker2 = "GOOG"
+ticker1 = "NVR"
+ticker2 = "SEB"
 start = "2024-01-01"
 end = "2025-02-20"
 
