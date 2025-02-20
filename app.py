@@ -9,12 +9,14 @@ from bokeh.plotting import figure
 from bokeh.models import Button, TextInput, DatePicker, MultiChoice
 from bokeh.layouts import column, row
 
+import time
+
 
 def load_data(ticker1, ticker2, start, end): 
     # Ticker = Financial abbreviation ex. Axiom is abbreviated as XOM
     df1= yf.download(ticker1, start, end)
-    import time
-    time.sleep(2) 
+    
+    time.sleep(5)
     df2 = yf.download(ticker2, start, end)
 
     if df1.empty or df2.empty:
