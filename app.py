@@ -1,6 +1,8 @@
 import math
 import numpy as np
 import datetime as dt
+import pandas as pd
+
 
 # import yfinance as yf
 from alpha_vantage.timeseries import TimeSeries
@@ -27,6 +29,10 @@ def load_data(ticker1, ticker2, start, end):
     df1, _ = ts.get_daily(symbol=ticker1, outputsize="full")
     df2, _ = ts.get_daily(symbol=ticker2, outputsize="full")
 
+    # Rename columns to standard format
+    df1.rename(columns={"1. open": "Open", "2. high": "High", "3. low": "Low", "4. close": "Close", "5. volume": "Volume"}, inplace=True)
+    df2.rename(columns={"1. open": "Open", "2. high": "High", "3. low": "Low", "4. close": "Close", "5. volume": "Volume"}, inplace=True)
+
     df1.index = pd.to_datetime(df1.index)
     df2.index = pd.to_datetime(df2.index)
 
@@ -38,6 +44,7 @@ def load_data(ticker1, ticker2, start, end):
         return None, None
 
     return df1, df2
+
 
 
 
