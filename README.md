@@ -2,7 +2,8 @@
 
 ## Screenshot
 
-![App Screenshot](https://drive.google.com/file/d/1UePxoeIvX9nQzTXoT3LquGb3z5kJwECa/view?usp=sharing)
+![App Screenshot](https://drive.google.com/uc?export=view&id=1qhPPXoG8L1fQXxraUFgd1UoFp4CyU4uE)
+
 
 ## Overview
 
