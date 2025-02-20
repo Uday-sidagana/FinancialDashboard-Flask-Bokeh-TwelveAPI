@@ -2,7 +2,8 @@ import math
 import numpy as np
 import datetime as dt
 
-import yfinance as yf
+# import yfinance as yf
+from alpha_vantage.timeseries import TimeSeries
 
 from bokeh.io import curdoc
 from bokeh.plotting import figure
@@ -22,12 +23,17 @@ api_key = os.getenv("API_KEY")
 print(f"Your API Key: {api_key}")  # Optional: for testing purposes
 
 
-def load_data(ticker1, ticker2, start, end): 
-    # Ticker = Financial abbreviation ex. Axiom is abbreviated as XOM
-    df1= yf.download(ticker1, start, end)
-    
-    time.sleep(5)
-    df2 = yf.download(ticker2, start, end)
+def load_data(ticker1, ticker2, start, end):
+    ts = TimeSeries(key=api_key, output_format='pandas')
+
+    df1, _ = ts.get_daily(symbol=ticker1, outputsize="full")
+    df2, _ = ts.get_daily(symbol=ticker2, outputsize="full")
+
+    df1.index = pd.to_datetime(df1.index)
+    df2.index = pd.to_datetime(df2.index)
+
+    df1 = df1[start:end]
+    df2 = df2[start:end]
 
     if df1.empty or df2.empty:
         print("Error: No data retrieved for one or both tickers")
