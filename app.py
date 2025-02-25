@@ -74,7 +74,7 @@ def plot_data(data, indicators, sync_axis=None):
         tools="pan, wheel_zoom, box_zoom, reset, save",
         x_axis_type="datetime", 
         width=500,  # Reduced width
-        height=300,  # Reduced height
+        height=400,  # Reduced height
         x_range=x_range
     )
 
